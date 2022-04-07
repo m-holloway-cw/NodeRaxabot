@@ -20,3 +20,7 @@ function connect(db){
 function testEmit(){
 main.chatEmitter.emit('test', 'test message');
 }
+
+const handleMessage = async msg =>{
+  cH.handleMessage(msg, API);
+}
