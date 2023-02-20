@@ -1,0 +1,126 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Raxabot</title>
+
+    <link rel="icon" href="https://i.imgur.com/FtRLUBG.png" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
+<link type="text/css" href="/css/commands.css" rel='stylesheet'>
+  </head>
+  <body>
+    <div class="header">
+        <p id="username" style="height: 5"></p>
+      <img class="avatar" height=50px; width=50px; src=""></img>
+    </div>
+    <div class = "nav">
+      <li id="dashButton"><a href="/">Dashboard</a></li>
+    </div>
+    <!--show our command names as buttons-->
+  <div id='commandDiv'>
+    <input type="text" id="commandSearch" onkeyup="filterCommands()" placeholder="search by name">
+
+    <p id='showData'></p>
+  </div>
+  <!-- div to show if the form post was successfull -->
+  <div id="changeStatus"></div>
+
+  <!--deal with options for commands, i.e. editing/adding-->
+  <div id="commandInfo">
+    &emsp;<h3 id="formHeading">Command Info</h3>
+    <form id="commandForm">
+     <!-- hidden input to send data to bot -->
+     <input type="hidden" id="method" name="method" value="edit" />
+      <label>
+      Name
+        <input type="text" id="commandName" name="commandName" value="" required>
+      </label>
+    &emsp;
+      <label>
+      Authorization
+        <input type="text" id="commandAuth" name="commandAuth">
+      </label>
+      <br>
+      <label>
+        Cooldown
+        <input type="text" id="commandCooldown" name="commandCooldown" required>
+      </label>
+      <!--
+      <br>
+      <label>
+        Initial Delay
+        <input type="text" id="commandInitialDelay" name="commandInitialDelay">
+      </label>
+      &emsp;
+      <label>
+        Interval
+        <input type="text" id="commandInterval" name="commandInterval">
+      </label>
+    -->
+      <br>
+      <label>
+        Enabled
+        <input type="radio" id="enabledTrue" name="enabled" value="true">
+      </label>
+      <label>
+        Disabled
+        <input type="radio" id="enabledFalse" name="enabled" value="false">
+      </label>
+      <br>
+      <label>
+        Repeating On
+        <input type="radio" id="repeatingTrue" name="repeating" value="true">
+       </label>
+       <label>
+         Repeating Off
+        <input type="radio" id="repeatingFalse" name="repeating" value="false">
+      </label>
+      <br>
+      <label>
+        Sound file
+        <input type="text" id="commandSound" name="commandSound">
+      </label>
+      <br>
+        <label>
+        Text
+      </label>
+      <br>
+        <textarea id="commandText" name="commandText" rows="10" columns="50" style='width:325px;height:130px;border-radius:15px;' required></textarea>
+          <!--<input type="text" id="commandText" name="commandText" value="" required>-->
+          <br>
+        <input id="submitCommandButton" type="submit" value="Submit Changes">
+    </form>
+    <h6 id="submitStatus"></h6>
+</div>
+<div>
+  <button id="showAddCommand" onclick="showAddCommand()">Add new command</button>
+</div>
+<div>
+  <form id="delForm">
+    <input type="hidden" name="method" value="delete">
+  <input id="deleteCommand" type="text" name="commandName" value="" placeholder="!command">
+  <br>
+  <br>
+  <input id="deleteCommandButton" type="submit" value="Delete Command">
+</form>
+</div>
+
+<!-- rpeating stuff -->
+<div><button id="showRepeating" onclick="showRepeating()">Repeating Menu</button></div>
+<div id="repeating"></div>
+<div><button id="restartRepeats" onclick="restartRepeats()">Restart Repeating Commands</button></div>
+<div id="repeatingInfo">
+
+</div>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="./js/commands.js"></script>
+    <script>
+      var user = "<%= user %>";
+      var avatar = "<%= profile_image_url %>";
+      console.log(user);
+      document.getElementById("username").innerHTML = user;
+      document.getElementsByClassName("avatar")[0].src = avatar;
+    </script>
+
+  </body>
+</html>

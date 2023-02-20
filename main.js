@@ -1,98 +1,45 @@
 const TwitchJs = require('twitch-js').default;
 
-const chat = require('./Chat/main.js');
-const website = require('./Website/main.js');
-const discord = require('./Discord/main.js');
+const chat = require('./Chat/chat.js');
+const website = require('./Website/website.js');
+const discord = require('./Discord/discord.js');
+
+const api = require('./twitchAPI');
 
 var mongo = require('./mongoUtil');
 var ObjectID = require('mongodb').ObjectID;
+const env = require('dotenv');
+env.config();
 
-const express = require('express');
-const app = express();
-var request = require('request');
-const bodyParser = require('body-parser');
+module.exports.chat = chat;
+module.exports.website = website;
+module.exports.discord = discord;
+module.exports.checkFunction = checkFunction;
+module.exports.env = env;
 
-const events = require('events');
-const chatEmitter = new events.EventEmitter();
 
-module.exports.chatEmitter = chatEmitter;
+async function startup(){
+  mongo.init(process.env.MONGO_KEY, (config) => {
+    api.init(config);
+    mongo.commands(process.env.MONGO_KEY, (commands) => {
+      chat.connect(config, commands);
+      mongo.alerts(process.env.MONGO_KEY, (alerts) => {
+        website.start(config, commands, alerts);
+      });
+    });
+    mongo.discord(process.env.MONGO_KEY, (discordConfig) => {
+      discord.start(discordConfig);
+    });
+  });
 
-function startup(){
-  var db = mongo.getDb();
+  /*mongo.connectToServer(process.env.MONGO_KEY, (db)=>{
 
-  chat.connect(db);
-  chatEmitter.on('test', handleChat)
-  chat.testEmit();
-
+  });*/
 }
 
 startup();
 
 
-function handleChat(){
-  console.log('chat event found')
-
-}
-
-
-//TODO possible move to chat, offline/online events go to discord, subcount to website,etc
-app.post('/api/bot/eventsub', function(req, res){
-  //console.log(req.body);
-  var challenge = req.body.challenge;
-  if(typeof challenge != 'undefined'){
-    res.send(challenge);
-  } else {
-    handleEvent(req.body);
-    res.sendStatus(200);
-  }
-});
-
-
-var subcount = 754; //test value
-function handleEvent(body){
-  //console.log(body)
-  var type = body.subscription.type;
-  switch (type) {
-    case 'channel.follow':
-      //console.log('follower found from event sub');
-      break;
-    case 'channel.subscribe':
-    console.log(body)
-      var tier = body.event.tier;
-      console.log('tier '+tier+' sub found from event sub');
-      subcount = subcount + getCount(tier);
-      console.log('subcount current:' + subcount)
-      break;
-    case 'channel.subscription.end':
-    console.log(body)
-      var tier = body.event.tier;
-      console.log('tier '+tier+' sub END found from event sub');
-      subcount = subcount - getCount(tier);
-      console.log('subcount current:' + subcount)
-      break;
-    case 'channel.subscription.gift':
-    console.log(body)
-      var tier = body.event.tier;
-      var total = body.event.total;
-      console.log('tier '+tier+' sub GIFT found from event sub');
-      subcount = subcount + getCount(tier) * total;
-      console.log('subcount current:' + subcount)
-      break;
-    case 'channel.subscription.message':
-    console.log(body)
-      var tier = body.event.tier;
-      var message = body.event.message.text;
-      console.log('tier '+tier+' sub MESSAGE found from event sub');
-      break;
-    case 'channel.cheer':
-    console.log(body)
-      var bits = body.event.bits;
-      var message = body.event.message;
-      console.log(bits + ' sent message:'+message+' found from event sub');
-      break;
-    default:
-      console.log('other event found, todo later');
-      console.log(body);
-
-  }
+function checkFunction(){
+  console.log('found check function in main file');
 }

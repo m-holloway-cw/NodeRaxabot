@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Raxabot</title>
+    <link type="text/css" href="/css/admin/dashboard.css" rel='stylesheet'>
+    <link rel="icon" href="https://kf.bot.raxastudios.com/kffcLove.png" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="header">
+        <p id="username"></p>
+      <img class="avatar" height=50px; width=50px; src=""></img>
+  </div>
+  <div id="nav-icon"><!-- spans for the fancy animation -->
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+  <div class = "nav" id="nav">
+    <ul>
+      <li style="border-radius: 17px 17px 0px 0px;"><a href="/commands">Commands</a></li>
+      <li><a href="/features">Features</a></li>
+      <li style="border-radius: 0px 0px 17px 17px;"><a href="/events" target="_blank">Event Overlay</a></li>
+    </ul>
+  </div>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<div id="testArea">
+  <button  onclick="testFollow()">Follow Test</button>
+  <button  onclick="testSub()">Sub Test</button>
+  <button  onclick="testRaid()">Raid Test</button>
+  <button onclick="testBit()">Bit Test</button>
+</div>
+   <script src="/js/admin/dashboard.js">//include extra js</script>
+
+   <script>
+   //script to setup username/profile pic
+   var user = "<%= user %>";
+   var avatar = "<%= profile_image_url %>";
+   console.log(user);
+   document.getElementById("username").innerHTML = user;
+   document.getElementsByClassName("avatar")[0].src = avatar;
+
+$(document).ready(function(){
+  window.resizeTo(500, 500);
+	$('#nav-icon').click(function(){
+		$(this).toggleClass('open');
+  	$("#nav").toggleClass("showing");
+	});
+});
+   </script>
+  </body>
+</html>
